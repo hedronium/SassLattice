@@ -1,0 +1,126 @@
+$slugs: 'm', 'p', 't', 'd', 'r';
+
+@mixin grid-visibility-in($slug) {
+  .hide-in-#{$slug} {
+    display: none;
+  }
+
+  .show-in-#{$slug} {
+    display: block;
+  }
+}
+
+@mixin grid-visibility-at($slug) {
+  .show-at-#{$slug} {
+    display: block;
+  }
+
+  .hide-at-#{$slug} {
+    display: none;
+  }
+}
+
+@mixin grid-classes($slug) {
+  @for $i from 1 through 12 {
+    .l-#{$slug}#{$i} {
+      @include span($a: $i, $set-float: false);
+    }
+
+    .l-#{$slug}#{$i}-pul {
+      @include pull($a: $i, $set-pos: false);
+    }
+
+    .l-#{$slug}#{$i}-pus {
+      @include push($a: $i, $set-pos: false);
+    }
+
+    .l-#{$slug}#{$i}-pre {
+      @include prefix($i);
+    }
+
+    .l-#{$slug}#{$i}-suf {
+      @include suffix($i);
+    }
+  }
+}
+
+%grid-column {
+  float: left;
+}
+
+%grid-ordered {
+  position: relative;
+}
+
+@for $i from 1 through 12 {
+  @each $slug in $slugs {
+    .l-#{$slug}#{$i} {
+      @extend %grid-column;
+    }
+
+    .l-#{$slug}#{$i}-pul {
+      @extend %grid-ordered;
+    }
+
+    .l-#{$slug}#{$i}-pus {
+      @extend %grid-ordered;
+    }
+  }
+}
+
+.container {
+  @include container(100%);
+}
+
+.row {
+  @extend %grid-clear-fix;
+}
+
+.centered {
+  float: none;
+  
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@include grid-classes('m');
+
+@include in-mobile {
+  @include grid-visibility-in('m');
+}
+
+@include at-phablet {
+  @include grid-classes('p');
+  @include grid-visibility-at('p');
+}
+
+@include in-phablet {
+  @include grid-visibility-in('p');
+}
+
+@include at-tablet {
+  @include grid-classes('t');
+  @include grid-visibility-at('t');
+}
+
+@include in-tablet {
+  @include grid-visibility-in('t');
+}
+
+@include at-desktop {
+  @include grid-classes('d');
+  @include grid-visibility-at('d');
+}
+
+@include in-desktop {
+  @include grid-visibility-in('d');
+}
+
+@include at-retina {
+  @include grid-classes('r');
+  @include grid-visibility-at('r');
+}
+
+@include in-retina {
+  @include grid-visibility-in('r');
+}

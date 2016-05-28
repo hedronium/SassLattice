@@ -1,0 +1,88 @@
+$grid-responsive-breakpoints: (
+	xsmall: 0px,
+	small: 40em,
+	medium: 64em,
+	large: 90em,
+	xlarge: 120em
+) !default;
+
+// TODO: Sort The breakpoints.
+
+$grid-responsive-breakpoint-keys: map-keys($grid-responsive-breakpoints);
+$grid-generate-responsive-order: true;
+
+@function grid-resolve-breakpoint($point) {
+	@if type-of($point) == "string" {
+		$a: map-get($grid-responsive-breakpoints, $point);
+
+		@if !$a {
+			@error "Breakpoint not defined.";
+		}
+	} @elseif !unitless($point) {
+		$a: $point;
+	}
+}
+
+@mixin between($point-a, $point-b: false) {
+	$a: grid-resolve-breakpoint($point-a);
+
+	@if ($a / ($a * 0 + 1)) == 0 {
+		@if $point-b == false {
+			@content;
+		} @else {
+			$b: grid-resolve-breakpoint($point-b);
+
+			@media (max-width: $b) {
+				@content;
+			}
+		}
+	} @elseif $point_b != false {
+		$b: grid-resolve-breakpoint($point-b);
+
+		@if index($grid-responsive-breakpoint-keys, $point-b) <= index($grid-responsive-breakpoint-keys, $point-a) {
+			@error "Point-B must be larger than Point-A";
+		}
+
+		@media (min-width: $a) and (max-width: $b) {
+			@content;
+		}
+	} @else {
+		@media (min-width: $a) {
+			@content;
+		}
+	}
+}
+
+@mixin at($point) {
+	@include between($point) {
+		@content;
+	}
+}
+
+@mixin in($point) {
+	$keys: $grid-responsive-breakpoint-keys;
+	$index: index($keys, $point);
+
+	@if $index == null {
+		@error "Breakpoint not defined.";
+	}
+
+	$b_index: $index + 1;
+
+	@if $b_index > length($keys) {
+		@include at(nth($keys, $index)) {
+			@content;
+		}
+	} @else {
+		@include between(nth($keys, $index), nth($keys, $b_index)) {
+			@content;
+		}
+	}
+}
+
+@if $grid-generate-responsive-order {
+	@each $name, $width in $grid-responsive-breakpoints {
+		@include at($name) {b{color:#000}};
+		@include in($name) {b{color:#000}};
+	}
+}
