@@ -16,9 +16,9 @@
 
   @if unit($a) == "%" {
 		$width: $a;
-	} @elseif unitless($a) && $a <= $columns {
+	} @elseif unitless($a) and $a <= $columns {
 		$width: percentage($a/$columns);
-	} @elseif unitless($a) && $a > $columns {
+	} @elseif unitless($a) and $a > $columns {
 		$width: pergentage($a);
 	}
 
