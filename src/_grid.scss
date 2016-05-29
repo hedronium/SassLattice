@@ -1,6 +1,3 @@
-$grid-columns: 12 !default;
-$container-defualt-width: 85%;
-
 %grid-clear-fix {
   *zoom: 1;
 
@@ -14,21 +11,21 @@ $container-defualt-width: 85%;
   }
 }
 
-@function grid-width-percentage($a, $b: $grid-columns) {
+@function grid-width-percentage($a, $columns: $grid-columns) {
   $width: 0%;
 
   @if unit($a) == "%" {
 		$width: $a;
-	} @elseif unitless($a) && $a <= $b {
-		$width: percentage($a/$b);
-	} @elseif unitless($a) && $a > $b {
+	} @elseif unitless($a) && $a <= $columns {
+		$width: percentage($a/$columns);
+	} @elseif unitless($a) && $a > $columns {
 		$width: pergentage($a);
 	}
 
   @return $width;
 }
 
-@mixin container($width: $container-defualt-width, $center: true){
+@mixin container($width: $grid-container-defualt-width, $center: true) {
 	@extend %grid-clear-fix;
 	width: $width;
 
@@ -37,48 +34,48 @@ $container-defualt-width: 85%;
 	}
 }
 
-@mixin clear{
+@mixin clear {
 	@extend .clear;
 }
 
-@mixin span($a, $b: $grid-columns, $set-float: true){
-  width: grid-width-percentage($a, $b);
+@mixin span($a, $columns: $grid-columns, $set-float: true) {
+  width: grid-width-percentage($a, $columns);
 
   @if $set-float {
     float: left;
   }
 }
 
-@mixin centered-span($a, $b: $grid-columns){
+@mixin centered-span($a, $columns: $grid-columns) {
 	margin: auto;
-	width: grid-width-percentage($a, $b);
+	width: grid-width-percentage($a, $columns);
 }
 
-@mixin push($a, $b: $grid-columns, $set-pos: true){
-  left: grid-width-percentage($a, $b);
+@mixin push($a, $columns: $grid-columns, $set-pos: true) {
+  left: grid-width-percentage($a, $columns);
 
   @if $set-pos {
     position: relative;
   }
 }
 
-@mixin pull($a, $b: $grid-columns, $set-pos: true) {
-  right: grid-width-percentage($a, $b);
+@mixin pull($a, $columns: $grid-columns, $set-pos: true) {
+  right: grid-width-percentage($a, $columns);
 
   @if $set-pos {
     position: relative;
   }
 }
 
-@mixin prefix($a, $b: $grid-columns){
-	margin-left: grid-width-percentage($a, $b);
+@mixin prefix($a, $columns: $grid-columns) {
+	margin-left: grid-width-percentage($a, $columns);
 }
 
-@mixin suffix($a, $b: $grid-columns) {
-	margin-right: grid-width-percentage($a, $b);
+@mixin suffix($a, $columns: $grid-columns) {
+	margin-right: grid-width-percentage($a, $columns);
 }
 
-@mixin gutter($size, $vertical: false) {
+@mixin pad($size, $vertical: false) {
 	$horizontal: $size/2;
 
 	@if type-of($vertical) == "number" {

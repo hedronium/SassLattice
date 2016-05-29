@@ -1,26 +1,21 @@
-$grid-responsive-breakpoints: (
-	xsmall: 0px,
-	small: 40em,
-	medium: 64em,
-	large: 90em,
-	xlarge: 120em
-) !default;
-
 // TODO: Sort The breakpoints.
 
 $grid-responsive-breakpoint-keys: map-keys($grid-responsive-breakpoints);
-$grid-generate-responsive-order: true;
 
 @function grid-resolve-breakpoint($point) {
+	$a: null;
+
 	@if type-of($point) == "string" {
 		$a: map-get($grid-responsive-breakpoints, $point);
 
-		@if !$a {
-			@error "Breakpoint not defined.";
+		@if not $a {
+			@error "Breakpoint '#{$point}' is not defined.";
 		}
-	} @elseif !unitless($point) {
+	} @elseif not unitless($point) {
 		$a: $point;
 	}
+
+	@return $a;
 }
 
 @mixin between($point-a, $point-b: false) {
@@ -40,7 +35,7 @@ $grid-generate-responsive-order: true;
 		$b: grid-resolve-breakpoint($point-b);
 
 		@if index($grid-responsive-breakpoint-keys, $point-b) <= index($grid-responsive-breakpoint-keys, $point-a) {
-			@error "Point-B must be larger than Point-A";
+			@error "Point-B must be larger than Point-A (#{$point-a} > #{$point-b})";
 		}
 
 		@media (min-width: $a) and (max-width: $b) {
