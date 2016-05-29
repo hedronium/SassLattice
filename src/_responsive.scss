@@ -138,16 +138,24 @@ $grid-responsive-breakpoint-keys: map-keys($grid-responsive-breakpoints);
 
 @debug $breakpoints;
 
-@if $grid-generate-responsive-order {
-	$n: 1;
+@mixin grid-generate-responsive-order {
+	@if $grid-generate-responsive-order {
+		$n: 1;
 
-	@each $name, $width in $breakpoints {
-		@include at($name) {b{color:inherit}};
+		@each $name, $width in $breakpoints {
+			@include at($name) { @content; };
 
-		@if $n != length($breakpoints) {
-			@include in($name) {b{color:inherit}};
+			@if $n != length($breakpoints) {
+				@include in($name) { @content; };
+			}
+
+			$n: $n + 1;
 		}
+	}
+}
 
-		$n: $n + 1;
+@include grid-generate-responsive-order {
+	x {
+		a:b;
 	}
 }
